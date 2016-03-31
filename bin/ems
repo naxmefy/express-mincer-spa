@@ -12,8 +12,9 @@ program
         console.log('    $ ems --version');
         console.log('');
     })
-    .command('precompile <target-application>', 'precompile assets of given application')
-    .command('new <name>', 'generate a new ems application')
+    .command('precompile <target>', 'precompile assets of given application')
+    .command('new <target>', 'generate a new ems application')
+    .command('start <target>', 'start ems application')
     .parse(process.argv);
    
 // console.log(program);

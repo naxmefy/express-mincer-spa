@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var fs = require('fs');
+var program = require('commander');
+var pkg = require('../package.json');
+
+program
+    .version(pkg.version)
+    .usage('<target>')
+    .option('-d, --debug-log', 'print debug log')
+    .on('--help', function(){
+        console.log('  Examples:');
+        console.log('');
+        console.log('    $ ems start');
+        console.log('    $ ems start my-spa-application');
+        console.log('    $ ems start /path/to/my-spa-application');
+        console.log('');
+    })
+    .parse(process.argv);
+
+if(program.debugLog) {
+    process.env.DEBUG = 'express-mincer-spa*';
+}    
+
+var target = program.args[0] || process.cwd();
+var targetPath = path.resolve(process.cwd(), target);
+
+if(fs.existsSync(targetPath)) {
+    var app = require(targetPath);
+    app.start();
+} else {
+    console.error('Target application '+target+' does not exists');
+}

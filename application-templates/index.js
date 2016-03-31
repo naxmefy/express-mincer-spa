@@ -1,5 +1,3 @@
-'use strict';
-
 var expressMincerSpa = require('..');
 var app = module.exports = expressMincerSpa(__dirname, {
     precompile: {

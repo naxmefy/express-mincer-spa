@@ -7,7 +7,8 @@
   "bin": {
     "ems": "bin/ems",
     "ems-new": "bin/ems-new",
-    "ems-precompile": "bin/ems-precompile"
+    "ems-precompile": "bin/ems-precompile",
+    "ems-start": "bin/ems-start"
   },
   "scripts": {
     "test": "mocha test",
@@ -35,11 +36,13 @@
     "connect-mincer": "1.1.0",
     "debug": "2.2.0",
     "express": "4.13.4",
+    "fs-extra": "0.26.7",
     "jade": "1.11.0",
     "livereload": "0.4.1",
     "lodash": "4.6.1",
     "mincer": "1.4.1",
-    "mkdirp": "0.5.1"
+    "mkdirp": "0.5.1",
+    "serve-favicon": "2.3.0"
   },
   "devDependencies": {
     "istanbul": "0.4.2",

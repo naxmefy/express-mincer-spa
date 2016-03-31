@@ -2,7 +2,12 @@
 
 var path = require('path');
 var fs = require('fs');
+var fse = require('fs-extra');
+var _ = require('lodash');
+var mkdirp = require('mkdirp');
 var program = require('commander');
+
+var ems = require('..');
 var pkg = require('../package.json');
 
 program
@@ -32,5 +37,140 @@ if (!process.argv.slice(2).length) {
         }
     }
     
+    // process exit event
+    process.on('exit', function(){
+        console.log();
+        console.log('   next:');
+        console.log('   $ cd %s', path.relative(process.cwd(), target));
+        console.log('   $ npm install');
+        console.log('   $ ems start');
+        console.log();
+        console.log('   install dependencies with local bower, e.g.:');
+        console.log('   $ npm run bower install --save jquery');
+        console.log();
+        console.log('   precompile assets with:');
+        console.log('   $ ems precompile');
+        console.log();
+        console.log('   more infos: https://github.com/naxmefy/express-mincer-spa');
+        console.log();
+    });
     
+    // setup app object
+    var app = {
+        name: name,
+        target: target,
+        ems: ems
+    };
+    
+    // Generate Files
+    mkdir(target, function(newPath) {
+        mkdir(path.resolve(newPath, 'assets'), function(newPath) {
+            mkdir(path.resolve(newPath, 'css'), function(newPath) {
+                writeTemplateTo('app.styl', newPath, app);
+                writeTemplateTo('font-fix.styl', newPath, app);
+            });
+            mkdir(path.resolve(newPath, 'js'), function(newPath) {
+                writeTemplateTo('app.coffee', newPath, app);
+            });
+            mkdir(path.resolve(newPath, 'vendor'), function(newPath) {
+                writeTemplateTo('.gitignore-assets', newPath, app, '.gitignore');
+            }); 
+        });
+        
+        mkdir(path.resolve(newPath, 'public'), function(newPath) {
+            mkdir(path.resolve(newPath, 'assets'), function(newPath) {
+                writeTemplateTo('.gitignore-assets', newPath, app, '.gitignore');
+            });
+            writeTemplateTo('favicon.ico', newPath, app, 'favicon.ico', true);
+            writeTemplateTo('robots.txt', newPath, app);
+        });
+        
+        mkdir(path.resolve(newPath, 'views'), function(newPath) {
+            writeTemplateTo('index.jade', newPath, app);
+        });
+        
+        writeTemplateTo('.bowerrc', newPath, app);
+        writeTemplateTo('.editorconfig', newPath, app);
+        writeTemplateTo('.gitignore', newPath, app);
+        writeTemplateTo('bower.json', newPath, app);
+        writeTemplateTo('index.js', newPath, app);
+        writeTemplateTo('LICENSE', newPath, app);
+        writeTemplateTo('package.json', newPath, app);
+        writeTemplateTo('README.md', newPath, app);
+    });
+}
+
+
+/**
+ * Check if the given directory `path` is empty.
+ *
+ * @param {String} path
+ * @param {Function} fn
+ */
+function emptyDirectory(path, fn) {
+  fs.readdir(path, function(err, files){
+    if (err && 'ENOENT' != err.code) throw err;
+    fn(!files || !files.length);
+  });
+}
+
+function writeTemplateTo(templateName, directory, app, as, copy) {
+    if(as == null) {
+        as = templateName;
+    }
+    
+    if(copy !== true) {
+        copy = false;
+    }
+    
+    var file = path.resolve(__dirname, '..', 'application-templates', templateName);
+    var target = path.resolve(directory, as);
+    if(copy === false) {
+        var data = fs.readFileSync(
+            file,
+            {"encoding":"UTF-8"}
+        );
+        var template = _.template(data, app);
+        write(target, template);
+    } else {
+        fse.copy(file, target);
+    }
+}
+
+/**
+ * echo str > path.
+ *
+ * @param {String} path
+ * @param {String} str
+ */
+
+function write(path, str) {
+  fs.writeFile(path, str);
+  console.log('   \x1b[36mcreate\x1b[0m : ' + path);
+}
+
+/**
+ * Mkdir -p.
+ *
+ * @param {String} path
+ * @param {Function} fn
+ */
+
+function mkdir(path, fn) {
+  mkdirp(path, 0755, function(err){
+    if (err) throw err;
+    console.log('   \033[36mcreate\033[0m : ' + path);
+    fn && fn(path);
+  });
+}
+
+/**
+ * Exit with the given `str`.
+ *
+ * @param {String} str
+ */
+
+function abort(str) {
+  console.error(str);
+  process.exit(1);
 }

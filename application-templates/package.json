@@ -1,7 +1,7 @@
 {
-    "name": "my-application",
-    "version": "0.1.0",
-    "description": "my-application",
+    "name": "{name}",
+    "version": "0.0.0",
+    "description": "{name}",
     "private": "true",
     "author": "whoami",
     "license": "",
@@ -17,6 +17,6 @@
     },
     "dependencies": {
         "bower": "*",  
-        "express-mincer-spa": "file:../"
+        "express-mincer-spa": "^{ems.pkg.version}"
     }
 }

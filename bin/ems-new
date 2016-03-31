@@ -91,7 +91,7 @@ if (!process.argv.slice(2).length) {
         
         writeTemplateTo('.bowerrc', newPath, app);
         writeTemplateTo('.editorconfig', newPath, app);
-        writeTemplateTo('.gitignore', newPath, app);
+        writeTemplateTo('.gitignore-main', newPath, app, '.gitignore');
         writeTemplateTo('bower.json', newPath, app);
         writeTemplateTo('index.js', newPath, app);
         writeTemplateTo('LICENSE', newPath, app);

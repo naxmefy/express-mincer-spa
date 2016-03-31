@@ -1,0 +1,1 @@
+console.log "FooBar" for n in [1...10]

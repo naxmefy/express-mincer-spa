@@ -47,6 +47,106 @@ Precompile assets
 $ ems precompile
 ```
 
+## Main File
+
+```JavaScript
+var expressMincerSpa = require('..');
+var app = module.exports = expressMincerSpa(__dirname, {
+    precompile: {
+        files: [
+            // DEFINE HERE FILES U WANNA PRECOMPILE
+            'app.css',
+            'app.js'
+        ]
+    }
+});
+
+if(!module.parent) {
+    app.start();
+}
+```
+
+## Default Options
+
+```JavaScript
+var defaultOpts = {
+  port: process.env.PORT || 3000,
+  ip: process.env.IP || '',
+  
+  host: function() {
+      return exports.host(this.ip, this.port);
+  },
+  
+  engine: 'jade',
+  views: path.resolve(root, 'views'),
+  public: path.resolve(root, 'public'),
+  favicon: path.resolve(root, 'public', 'favicon.ico'),
+  
+  configureAssetPipeline: function()  {},
+  configureExpress: function()  {},
+  
+  assets: {
+      mincer: Mincer,
+      root: root,
+      production: env === 'production',
+      mountPath: '/assets',
+      manifestFile: path.resolve(root, 'public', 'assets', 'manifest.json'),
+      paths: [],
+      scanDirectories: [
+          'assets'
+      ],
+  },
+  
+  precompile: {
+      target: path.resolve(root, 'public', 'assets'),
+      images: true,
+      fonts: true,
+      files: [],
+      options: {}
+  },
+  
+  livereload: {
+      active: env === 'development',
+      ip: process.env.LIVERELOAD_IP || 'localhost',
+      port: process.env.LIVERELOAD_PORT || 35729,
+      script: function () {
+          return util.format('//%s:%s/livereload.js', this.ip, this.port);
+      },
+      host: function() {
+          return exports.host(this.ip, this.port);
+      },
+      watch: [],
+      debug: env === 'development',
+      exts: [
+          'js',
+          'coffee',
+          'json',
+          'html',
+          'jade',
+          'ejs',
+          'css',
+          'styl',
+          'less',
+          'png',
+          'gif',
+          'jpg',
+          'svg',
+          'ico',
+          'eof',
+          'ttf',
+          'woff',
+          'woff2'
+      ]
+  }
+};
+```
+
+
+## Mincer
+
+* [Mincer API Documentation](http://nodeca.github.io/mincer)
+* [Mincer Github Repo](https://github.com/nodeca/mincer)
+
 ## example font fix
 
 e.g. Font-Awesome

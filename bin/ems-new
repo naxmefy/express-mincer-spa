@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var fs = require('fs');
+var program = require('commander');
+var pkg = require('../package.json');
+
+program
+    .version(pkg.version)
+    .usage('<target>')
+    .option('-f, --force', 'force to overwrite if app already exists')
+    .on('--help', function(){
+        console.log('  Examples:');
+        console.log('');
+        console.log('    $ ems new my-spa-application');
+        console.log('    $ ems new /path/to/my-spa-application');
+        console.log('');
+    })
+    .parse(process.argv);
+    
+if (!process.argv.slice(2).length) {
+    program.outputHelp();
+} else {
+    var target = path.resolve(process.cwd(), program.args[0]);
+    var name = path.basename(target);
+    if(fs.existsSync(target)) {
+        if(!program.force) {
+            console.error('Folder at path %s already exists', target);
+            process.exit(0);
+        } else {
+            console.log('Folder already exists. Overwrite folder.');
+        }
+    }
+    
+    
+}

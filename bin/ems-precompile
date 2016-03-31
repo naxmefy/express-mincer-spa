@@ -1,0 +1,74 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var fs = require('fs');
+var program = require('commander');
+var _ = require("lodash");
+var ems = require('..');
+
+var pkg = require('../package.json');
+
+program
+    .version(pkg.version)
+    .usage('<target-application.js>')
+    .option('-s, --source-maps', 'write sourcemap files')
+    .option('-e, --embed-mapping-comments', 'embed sourcemap url into created files')
+    .option('-c, --compress', 'create gzipped files')
+    .on('--help', function(){
+        console.log('  Examples:');
+        console.log('');
+        console.log('    $ ems precompile index.js');
+        console.log('');
+    })
+    .parse(process.argv);
+    
+if (!process.argv.slice(2).length) {
+    program.outputHelp();
+} else {
+    // Setup NODE ENV to production
+    process.env.NODE_ENV = 'production';
+    
+    var target = program.args[0];
+    var targetPath = path.resolve(process.cwd(), target);
+    if(fs.existsSync(targetPath)) {
+        var app = require(targetPath);
+        app.bootstrap({
+            assets: {
+                production: false
+            },
+            precompile: {
+                options: {
+                    sourceMaps: program.sourceMaps,
+                    embedMappingComments: program.embedMappingComments,
+                    compress: program.compress
+                }
+            }
+        });
+        
+        if(_.has(app, 'assetPipeline')) {
+            var manifest = new app.assetPipeline.Mincer.Manifest(
+                app.assetPipeline.environment,
+                app.config.precompile.target
+            );
+            var files = app.config.precompile.files || [];
+            if(app.config.precompile.fonts) {
+                files = _.concat(files, ems.getPrecompileFonts());
+            }
+            
+            if(app.config.precompile.images) {
+                files = _.concat(files, ems.getPrecompileImages());
+            }
+            var data = manifest.compile(files, app.config.precompile.options);
+            for(var f in data.assets) {
+                var asset = data.assets[f];
+                console.log('compiled %s to %s', f, asset);
+            }
+        } else {
+            console.error('Target application does not have a mincer asset pipeline');
+        }
+        
+    } else {
+        console.error('Target application '+target+' does not exists');
+    }
+}
+

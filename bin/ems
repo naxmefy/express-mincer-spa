@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var pkg = require('../package.json');
+
+program
+    .version(pkg.version)
+    .on('--help', function(){
+        console.log('  Examples:');
+        console.log('');
+        console.log('    $ ems --help');
+        console.log('    $ ems --version');
+        console.log('');
+    })
+    .command('precompile <target-application>', 'precompile assets of given application')
+    .command('new <name>', 'generate a new ems application')
+    .parse(process.argv);
+   
+// console.log(program);
+var has = false;
+program.commands.forEach(function(c) {
+    if(program.args[0] === c._name) {
+        return has = true;
+    }
+});
+
+if(has === false) {
+    console.error('Unknown command '+program.args[0]);
+}

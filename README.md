@@ -84,8 +84,8 @@ var defaultOpts = {
   public: path.resolve(root, 'public'),
   favicon: path.resolve(root, 'public', 'favicon.ico'),
   
-  configureAssetPipeline: function()  {},
-  configureExpress: function()  {},
+  configureAssetPipeline: function(assetPipeline)  {},
+  configureExpress: function(app)  {},
   
   assets: {
       mincer: Mincer,

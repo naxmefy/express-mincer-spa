@@ -1,4 +1,4 @@
-var expressMincerSpa = require('..');
+var expressMincerSpa = require('express-mincer-spa');
 var app = module.exports = expressMincerSpa(__dirname, {
     precompile: {
         files: [

@@ -145,7 +145,11 @@ var defaultOpts = {
 ## Mincer
 
 * [Mincer API Documentation](http://nodeca.github.io/mincer)
-* [Mincer Github Repo](https://github.com/nodeca/mincer)
+* [Github Repo](https://github.com/nodeca/mincer)
+
+## Connect Mincer
+
+* [Github Repo](https://github.com/clarkdave/connect-mincer)
 
 ## example font fix
 

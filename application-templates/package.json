@@ -1,22 +1,25 @@
 {
-    "name": "{name}",
-    "version": "0.0.0",
-    "description": "{name}",
-    "private": "true",
-    "author": "whoami",
-    "license": "",
-    "main": "index.js",
-    "scripts": {
-        "bower": "bower",
-        "postinstall": "npm run bower install && npm run precompile",
-        "start": "node index.js",
-        "precompile": "ems precompile index.js"
-    },
-    "engines": {
-        "node": "4.4.0"
-    },
-    "dependencies": {
-        "bower": "*",  
-        "express-mincer-spa": "^{ems.pkg.version}"
-    }
+  "name": "{name}",
+  "version": "0.0.0",
+  "description": "{name}",
+  "private": "true",
+  "author": "whoami",
+  "license": "",
+  "main": "index.js",
+  "scripts": {
+    "bower": "bower",
+    "postinstall": "npm run bower install && npm run precompile",
+    "start": "node index.js",
+    "precompile": "ems precompile index.js"
+  },
+  "dependencies": {
+    "bower": "^1.7.7",
+    "coffee-script": "1.10.0",
+    "ejs": "2.4.1",
+    "express-mincer-spa": "^{ems.pkg.version}",
+    "jade": "1.11.0",
+    "jst": "0.0.13",
+    "less": "1.7.5",
+    "stylus": "0.54.2"
+  }
 }

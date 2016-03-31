@@ -130,7 +130,7 @@ function writeTemplateTo(templateName, directory, app, as, copy) {
             file,
             {"encoding":"UTF-8"}
         );
-        var template = _.template(data, app);
+        var template = _.template(data)(app);
         write(target, template);
     } else {
         fse.copy(file, target);

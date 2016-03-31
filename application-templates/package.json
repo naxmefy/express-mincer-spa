@@ -1,7 +1,7 @@
 {
-  "name": "{name}",
+  "name": "${name}",
   "version": "0.0.0",
-  "description": "{name}",
+  "description": "${name}",
   "private": "true",
   "author": "whoami",
   "license": "",
@@ -16,7 +16,7 @@
     "bower": "^1.7.7",
     "coffee-script": "1.10.0",
     "ejs": "2.4.1",
-    "express-mincer-spa": "^{ems.pkg.version}",
+    "express-mincer-spa": "^${ems.pkg.version}",
     "jade": "1.11.0",
     "jst": "0.0.13",
     "less": "1.7.5",

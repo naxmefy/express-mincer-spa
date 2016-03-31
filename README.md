@@ -68,6 +68,8 @@ if(!module.parent) {
 
 ## Default Options
 
+[see here in lib](https://github.com/naxmefy/express-mincer-spa/blob/master/lib/index.js#L117)
+
 ```JavaScript
 var defaultOpts = {
   port: process.env.PORT || 3000,

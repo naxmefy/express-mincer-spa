@@ -86,6 +86,7 @@ var defaultOpts = {
   
   middlewareForStaticPublic: [],
   configureAssetPipeline: function(assetPipeline)  {},
+  configureExpressBeforeMiddlewares: function(app)  {},
   configureExpress: function(app)  {},
   
   assets: {

@@ -23,7 +23,7 @@ program
         console.log('');
     })
     .parse(process.argv);
-    
+
 
 // Setup NODE ENV to production
 process.env.NODE_ENV = 'production';
@@ -44,7 +44,7 @@ if(fs.existsSync(targetPath)) {
             }
         }
     });
-    
+
     if(_.has(app, 'assetPipeline')) {
         var manifest = new app.assetPipeline.Mincer.Manifest(
             app.assetPipeline.environment,
@@ -54,15 +54,14 @@ if(fs.existsSync(targetPath)) {
         if(app.config.precompile.fonts) {
             files = _.concat(files, ems.getPrecompileFonts());
         }
-        
+
         if(app.config.precompile.images) {
             files = _.concat(files, ems.getPrecompileImages());
         }
         var data = manifest.compile(files, app.config.precompile.options);
-        for(var f in data.assets) {
-            var asset = data.assets[f];
-            console.log('compiled %s to %s', f, asset);
-        }
+        _.forEach(data.assets, function (compiled, raw) {
+            console.log('compiled %s to %s', compiled, raw);
+        });
     } else {
         console.error('Target application does not have a mincer asset pipeline');
     }

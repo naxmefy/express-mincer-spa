@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var debug = require('debug')('ems:precompile');
 var path = require('path');
 var fs = require('fs');
 var program = require('commander');
@@ -24,15 +25,22 @@ program
     })
     .parse(process.argv);
 
+debug('start precompile');
 
 // Setup NODE ENV to production
+debug('set env to production');
 process.env.NODE_ENV = 'production';
 
 var target = program.args[0] || process.cwd();
 var targetPath = path.resolve(process.cwd(), target);
+debug('setup target: %s', targetPath);
+
+debug('check target');
 if(fs.existsSync(targetPath)) {
+    debug('target exists');
+    debug('load target app');
     var app = require(targetPath);
-    app.bootstrap({
+    const bootstrapConf = {
         assets: {
             production: false
         },
@@ -43,13 +51,19 @@ if(fs.existsSync(targetPath)) {
                 compress: program.compress
             }
         }
-    });
+    };
 
+    debug('start app bootstrap with some conf', bootstrapConf);
+    app.bootstrap(bootstrapConf);
+
+    debug('proof app assetPipeline');
     if(_.has(app, 'assetPipeline')) {
+        debug('load manifest');
         var manifest = new app.assetPipeline.Mincer.Manifest(
             app.assetPipeline.environment,
             app.config.precompile.target
         );
+        debug('fetch files to precompile');
         var files = app.config.precompile.files || [];
         if(app.config.precompile.fonts) {
             files = _.concat(files, ems.getPrecompileFonts());
@@ -58,6 +72,7 @@ if(fs.existsSync(targetPath)) {
         if(app.config.precompile.images) {
             files = _.concat(files, ems.getPrecompileImages());
         }
+        debug('start precompile');
         var data = manifest.compile(files, app.config.precompile.options);
         _.forEach(data.assets, function (compiled, raw) {
             console.log('compiled %s to %s', compiled, raw);
@@ -66,6 +81,7 @@ if(fs.existsSync(targetPath)) {
         console.error('Target application does not have a mincer asset pipeline');
     }
 } else {
+    debug('target does not exist');
     console.error('Target application '+target+' does not exists');
 }
 

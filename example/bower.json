@@ -1,6 +1,10 @@
 {
-    "name": "my-application",
-    "version": "0.0.0",
-    "description": "my-application",
-    "private": true
+  "name": "my-application",
+  "version": "0.0.0",
+  "description": "my-application",
+  "private": true,
+  "dependencies": {
+    "font-awesome": "4.6.2",
+    "bootstrap": "3.3.6"
+  }
 }

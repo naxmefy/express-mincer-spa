@@ -15,7 +15,7 @@ program
     .option('-s, --source-maps', 'write sourcemap files')
     .option('-e, --embed-mapping-comments', 'embed sourcemap url into created files')
     .option('-c, --compress', 'create gzipped files')
-    .on('--help', function(){
+    .on('--help', function () {
         console.log('  Examples:');
         console.log('');
         console.log('    $ ems precompile');
@@ -36,13 +36,13 @@ var targetPath = path.resolve(process.cwd(), target);
 debug('setup target: %s', targetPath);
 
 debug('check target');
-if(fs.existsSync(targetPath)) {
+if (fs.existsSync(targetPath)) {
     debug('target exists');
     debug('load target app');
     var app = require(targetPath);
     const bootstrapConf = {
         assets: {
-            production: false
+            production: true
         },
         precompile: {
             options: {
@@ -56,33 +56,45 @@ if(fs.existsSync(targetPath)) {
     debug('start app bootstrap with some conf', bootstrapConf);
     app.bootstrap(bootstrapConf);
 
-    debug('proof app assetPipeline');
-    if(_.has(app, 'assetPipeline')) {
-        debug('load manifest');
-        var manifest = new app.assetPipeline.Mincer.Manifest(
-            app.assetPipeline.environment,
-            app.config.precompile.target
-        );
-        debug('fetch files to precompile');
-        var files = app.config.precompile.files || [];
-        if(app.config.precompile.fonts) {
-            files = _.concat(files, ems.getPrecompileFonts());
-        }
+    var Mincer = app.config.assets.mincer || require('mincer');
+    var Environment = new Mincer.Environment(app.config.assets.root);
+    _.forEach(app.config.assets.paths, function (assetPath) {
+        console.log('load asset path: %s', assetPath);
+        Environment.appendPath(assetPath);
+    });
 
-        if(app.config.precompile.images) {
-            files = _.concat(files, ems.getPrecompileImages());
+    // Register an Helper for using inside Assets
+    Environment.registerHelper('asset_path', function (name, opts) {
+        var assetPath = null;
+        var asset = Environment.findAsset(name, opts);
+        if (!asset) throw new Error("File [" + name + "] not found");
+        if (app.config.assets.production) {
+            assetPath = '/assets/' + asset.digestPath;
+        } else {
+            assetPath = '/assets/' + asset.logicalPath;
         }
-        debug('start precompile');
-        var data = manifest.compile(files, app.config.precompile.options);
-        _.forEach(data.assets, function (compiled, raw) {
-            console.log('compiled %s to %s', compiled, raw);
-        });
-    } else {
-        console.error('Target application does not have a mincer asset pipeline');
+        return assetPath;
+    });
+
+    var files = app.config.precompile.files || [];
+    if (app.config.precompile.fonts) {
+        files = _.concat(files, ems.getPrecompileFonts());
     }
+    
+    if (app.config.precompile.images) {
+        files = _.concat(files, ems.getPrecompileImages());
+    }
+
+    console.log(files);
+
+    var Manifest = new Mincer.Manifest(Environment, app.config.precompile.target);
+    var data = Manifest.compile(app.config.precompile.files, app.config.precompile.options);
+    _.forEach(data.assets, function (raw, compiled) {
+        console.log('compiled: %s to %s', compiled, raw);
+    });
 } else {
     debug('target does not exist');
-    console.error('Target application '+target+' does not exists');
+    console.error('Target application ' + target + ' does not exists');
 }
 
 

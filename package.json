@@ -42,6 +42,7 @@
     "lodash": "4.6.1",
     "mincer": "1.4.1",
     "mkdirp": "0.5.1",
+    "pug": "2.0.0-alpha7",
     "serve-favicon": "2.3.0"
   },
   "devDependencies": {

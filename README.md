@@ -93,7 +93,7 @@ var defaultOpts = {
       mincer: Mincer,
       root: root,
       production: env === 'production',
-      mountPath: '/assets',
+      mountPoint: '/assets',
       manifestFile: path.resolve(root, 'public', 'assets', 'manifest.json'),
       paths: [],
       scanDirectories: [

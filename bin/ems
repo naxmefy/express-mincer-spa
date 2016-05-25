@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var program = require('commander');
-var pkg = require('../package.json');
+var path = require('path');
+var pkg = require(path.resolve(__dirname, '..', '/package.json'));
 
 program
     .version(pkg.version)

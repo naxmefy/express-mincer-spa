@@ -2,7 +2,7 @@
 
 var program = require('commander');
 var path = require('path');
-var pkg = require(path.resolve(__dirname, '..', '/package.json'));
+var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
 program
     .version(pkg.version)

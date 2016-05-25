@@ -8,7 +8,7 @@ var mkdirp = require('mkdirp');
 var program = require('commander');
 
 var ems = require(path.resolve(__dirname, '..'));
-var pkg = require(path.resolve(__dirname, '..', '/package.json'));
+var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
 program
     .version(pkg.version)

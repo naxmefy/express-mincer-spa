@@ -72,23 +72,40 @@ if(!module.parent) {
 
 ```JavaScript
 var defaultOpts = {
-  port: process.env.PORT || 3000,
-  ip: process.env.IP || '',
-  
-  host: function() {
+    port: process.env.PORT || 3000,
+    ip: process.env.IP || '',
+    
+    host: function() {
       return exports.host(this.ip, this.port);
-  },
+    },
+    
+    engine: 'jade',
+    views: path.resolve(root, 'views'),
+    public: path.resolve(root, 'public'),
+    favicon: path.resolve(root, 'public', 'favicon.ico'),
+    
+    useSpaRoute: true,
+    middlewareForStaticPublic: [],
+    configureAssetPipeline: function(assetPipeline)  {},
+    configureExpressBeforeMiddlewares: function(app)  {},
+    configureExpress: function(app)  {},
   
-  engine: 'jade',
-  views: path.resolve(root, 'views'),
-  public: path.resolve(root, 'public'),
-  favicon: path.resolve(root, 'public', 'favicon.ico'),
-  
-  useSpaRoute: true,
-  middlewareForStaticPublic: [],
-  configureAssetPipeline: function(assetPipeline)  {},
-  configureExpressBeforeMiddlewares: function(app)  {},
-  configureExpress: function(app)  {},
+    notFoundHandler: function (req, res, next) {
+        var error = new Error('Not Found');
+        error.status = 404;
+        next(error);
+    },
+    errorHandler: function(err, req, res, next) {
+        res.status(err.status || 500);
+        var resp = {
+            message: err.message
+        };
+        if(req.app.get('env') !== 'production') {
+            resp.error = err;
+            resp.stack = err.stack.split('\n');
+        }
+        res.render('error.jade', resp);
+    },
   
   assets: {
       mincer: Mincer,

@@ -10,7 +10,7 @@
     "bower": "bower",
     "postinstall": "npm run bower install && npm run precompile",
     "start": "node index.js",
-    "precompile": "ems precompile index.js"
+    "precompile": "ems-precompile index.js"
   },
   "dependencies": {
     "bower": "^1.7.7",

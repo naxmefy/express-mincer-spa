@@ -1,6 +1,6 @@
 {
   "name": "express-mincer-spa",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "description": "simple solution to build frontend applications",
   "main": "lib/index.js",
   "preferGlobal": true,

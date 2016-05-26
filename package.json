@@ -5,10 +5,10 @@
   "main": "lib/index.js",
   "preferGlobal": true,
   "bin": {
-    "ems": "./bin/ems",
-    "ems-new": "./bin/ems-new",
-    "ems-precompile": "./bin/ems-precompile",
-    "ems-start": "./bin/ems-start"
+    "ems": "bin/ems",
+    "ems-new": "bin/ems-new",
+    "ems-precompile": "bin/ems-precompile",
+    "ems-start": "bin/ems-start"
   },
   "scripts": {
     "test": "mocha test",

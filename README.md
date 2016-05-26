@@ -84,6 +84,7 @@ var defaultOpts = {
   public: path.resolve(root, 'public'),
   favicon: path.resolve(root, 'public', 'favicon.ico'),
   
+  useSpaRoute: true,
   middlewareForStaticPublic: [],
   configureAssetPipeline: function(assetPipeline)  {},
   configureExpressBeforeMiddlewares: function(app)  {},

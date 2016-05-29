@@ -123,6 +123,9 @@ var defaultOpts = {
       target: path.resolve(root, 'public', 'assets'),
       images: true,
       fonts: true,
+      mainFile: 'index',
+      mainFileTarget: path.resolve(root, 'public', 'index.html'),
+      precompileMainFile: false,
       files: [],
       options: {}
   },

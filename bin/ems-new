@@ -131,23 +131,12 @@ function writeTemplateTo(templateName, directory, app, as, copy) {
             {"encoding":"UTF-8"}
         );
         var template = _.template(data)(app);
-        write(target, template);
+        ems.utils.write(target, template);
     } else {
         fse.copy(file, target);
     }
 }
 
-/**
- * echo str > path.
- *
- * @param {String} path
- * @param {String} str
- */
-
-function write(path, str) {
-  fs.writeFile(path, str);
-  console.log('   \x1b[36mcreate\x1b[0m : ' + path);
-}
 
 /**
  * Mkdir -p.

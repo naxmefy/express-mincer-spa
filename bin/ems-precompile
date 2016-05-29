@@ -42,11 +42,14 @@ if(fs.existsSync(targetPath)) {
 
     run(false);
     run(true);
-
+    if(app.config.precompile.precompileMainFile) {
+        precompileMainFile();
+    }
 } else {
     debug('target does not exist');
     console.error('Target application '+target+' does not exists');
 }
+
 function run(production) {
     bootstrap(production);
     precompile(production);
@@ -87,9 +90,20 @@ function precompile(production) {
     }
 
     var data = manifest.compile(files, app.config.precompile.options);
-    _.forEach(data.assets, function (raw, compiled) {
+    _.forEach(data.assets, function (compiled, raw) {
         if(production) {
-            console.log('compiled: %s to %s', compiled, raw);
+            ems.utils.log('create', compiled);
         }
+    });
+}
+
+function precompileMainFile() {
+    app.assetPipeline.assets()(null, app, function() {});
+    app.render(app.config.precompile.mainFile, {}, function(err, html) {
+        if(err) {
+            throw err;
+        }
+        
+        ems.utils.write(app.config.precompile.mainFileTarget, html);
     });
 }

@@ -42,6 +42,7 @@
     "lodash": "4.6.1",
     "mincer": "1.4.1",
     "mkdirp": "0.5.1",
+    "require-dir": "0.3.0",
     "serve-favicon": "2.3.0"
   },
   "devDependencies": {

@@ -123,9 +123,12 @@ var defaultOpts = {
       target: path.resolve(root, 'public', 'assets'),
       images: true,
       fonts: true,
-      mainFile: 'index',
-      mainFileTarget: path.resolve(root, 'public', 'index.html'),
-      precompileMainFile: false,
+      views: false,
+      viewFiles: [
+        'index'
+      ],
+      viewsTarget: path.resolve(root, 'public'),
+      updateAppBeforePrecompileViews: function(app) {},
       files: [],
       options: {}
   },

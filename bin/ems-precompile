@@ -4,6 +4,8 @@ var debug = require('debug')('ems:precompile');
 var path = require('path');
 var fs = require('fs');
 var program = require('commander');
+var damnUtils = require('damn-utils');
+var async = require('async');
 var _ = require("lodash");
 var ems = require(path.resolve(__dirname, '..'));
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
@@ -42,8 +44,8 @@ if(fs.existsSync(targetPath)) {
 
     run(false);
     run(true);
-    if(app.config.precompile.precompileMainFile) {
-        precompileMainFile();
+    if(app.config.precompile.views) {
+        precompileViews();
     }
 } else {
     debug('target does not exist');
@@ -97,13 +99,37 @@ function precompile(production) {
     });
 }
 
-function precompileMainFile() {
+function precompileViews() {
+    app.locals.pretty = true;
     app.assetPipeline.assets()(null, app, function() {});
-    app.render(app.config.precompile.mainFile, {}, function(err, html) {
+    app.config.precompile.updateAppBeforePrecompileViews(app);
+    
+    function render(args, next) {
+        app.render(args.file, {}, function(err, html) {
+            if(err) {
+                throw err;
+            }
+            
+            ems.utils.write(args.target, html);
+            next();
+        });
+    }
+    
+    var actions = [];
+    for(var i = 0; i < app.config.precompile.viewFiles.length; i++) {
+        var file = app.config.precompile.viewFiles[i];
+        actions.push(damnUtils.async.bootstrapAction(render, {
+            file: file,
+            target: path.resolve(
+                app.config.precompile.viewsTarget,
+                file+'.html'
+            )
+        }));
+    }
+    
+    async.series(actions, function(err) {
         if(err) {
             throw err;
         }
-        
-        ems.utils.write(app.config.precompile.mainFileTarget, html);
     });
 }

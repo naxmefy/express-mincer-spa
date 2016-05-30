@@ -6,6 +6,12 @@ var app = module.exports = expressMincerSpa(__dirname, {
         files: [
             'app.css',
             'app.js'
+        ],
+        
+        views: true,
+        viewFiles: [
+            'index',
+            'other'
         ]
     }
 });

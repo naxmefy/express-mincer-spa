@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-require('dotenv').config();
+require('dotenv').config({silent: true});
 var debug = require('debug')('ems:precompile');
 var path = require('path');
 var fs = require('fs');
